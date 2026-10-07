@@ -21,12 +21,24 @@ def tampilkanDetail(t):
     print(f"Deskripsi : {t['deskripsi']}")
     print("------------")
 
-def cariTransaksi(idTransaksi):
+def lihatTransaksi(idTransaksi):
     for t in transaksi:
         if t["id"] == idTransaksi:
             return t
         
     return None
+
+def searchTransaksi():
+    print("\n=== Cari Transaksi ===")
+    keyword = input("Masukkan kata kunci : ").lower()
+    ditemukan = False
+
+    for t in transaksi:
+        if keyword in t["deskripsi"].lower():
+            tampilkanDetail(t)
+            ditemukan = True
+    if not ditemukan:
+        print("Transaksi tidak ditemukan.")
 
 def pilihKategori():
     print("\n=== Pilih Kategori ===")
@@ -63,6 +75,9 @@ def showMenu():
     print("3. Edit Transaksi")
     print("4. Hapus Transaksi")
     print("5. Lihat Saldo")
+    print("6. Cari Transaksi")
+    print("7. Laporan Keuangan")
+    print("8. Filter Transaksi")
     print("0. Keluar")
     print("----------------")
 
@@ -121,7 +136,7 @@ def tambahTransaksi():
     print(f"Kategori     : {kategori}")
     print(f"Deskripsi    : {deskripsi}")
 
-def lihatTransaksi():
+def cariTransaksi():
     print("\n=== Daftar Transaksi ===")
 
     if len(transaksi) == 0:
@@ -243,6 +258,97 @@ def lihatSaldo():
     print(f"Total Pengeluaran : {formatRupiah(totalPengeluaran)}")
     print(f"Saldo Bersih      : {formatRupiah(saldo)}")
 
+def laporanKeuangan():
+    print("---- Laporan Keuangan ----")
+    if len(transaksi) == 0:
+        print("Belum ada transaksi.")
+        return
+
+    totalPemasukan = 0
+    totalPengeluaran = 0
+    jumlahPemasukan = 0
+    jumlahPengeluaran = 0
+    pengeluaranKategori = {}
+    pemasukanKategori = {}
+    transaksiTerbesar = transaksi[0]
+
+    for t in transaksi:
+        if t["tipe"] == "pemasukan":
+            totalPemasukan += t["nominal"]
+            jumlahPemasukan += 1
+            kategori = t["kategori"]
+            if kategori not in pemasukanKategori:
+                pemasukanKategori[kategori] = 0
+            pemasukanKategori[kategori] += t["nominal"]
+
+        if t["tipe"] == "pengeluaran":
+                totalPengeluaran += t["nominal"]
+                jumlahPengeluaran += 1
+                kategori = t["kategori"]
+                if kategori not in pengeluaranKategori:
+                    pengeluaranKategori[kategori] = 0
+                pengeluaranKategori[kategori] += t["nominal"]
+
+        if t["nominal"] > transaksiTerbesar["nominal"]:
+            transaksiTerbesar = t
+    saldo = totalPemasukan - totalPengeluaran
+
+    print("\n=== Ringkasan ===")
+    print(f"Jumlah Transaksi  : {len(transaksi)}")
+    print(f"Jumlah Pemasukan  : {jumlahPemasukan}")
+    print(f"Jumlah Pengeluaran: {jumlahPengeluaran}")
+
+    print("\n=== Keuangan ===")
+    print(f"Total Pemasukan   : {formatRupiah(totalPemasukan)}")
+    print(f"Total Pengeluaran : {formatRupiah(totalPengeluaran)}")
+    print(f"Saldo Bersih      : {formatRupiah(saldo)}")
+
+    print("\n=== Pemasukan Berdasarkan Kategori ===")
+
+    if len(pemasukanKategori) == 0:
+        print("Belum ada pemasukan.")
+    else:
+        for kategori, total in pemasukanKategori.items():
+            print(f"{kategori:<20}: {formatRupiah(total)}")
+
+
+    print("\n=== Transaksi Terbesar ===")
+    tampilkanDetail(transaksiTerbesar)
+
+    print("\n=== Pengeluaran Berdasarkan Kategori ===")
+
+    if len(pengeluaranKategori) == 0:
+        print("Belum ada pengeluaran.")
+    else:
+        for kategori, total in pengeluaranKategori.items():
+            print(f"{kategori:<20}: {formatRupiah(total)}")
+
+def filterTransaksi():
+    print("\n--- Filter Transaksi ---")
+    print("1. Pemasukan")
+    print("2. Pengeluaran")
+    print("0. Kembali")
+    pilihan = input("Pilih filter (0-2) : ")
+    match pilihan:
+        case "1":
+            tipeFilter = "pemasukan"
+        case "2":
+            tipeFilter = "pengeluaran"
+        case "0":
+            return
+        case _:
+            print("Tidak valid.")
+            return
+
+    ditemukan = False
+    for t in transaksi:
+        if t["tipe"] == tipeFilter:
+            tampilkanDetail(t)
+            ditemukan = True
+
+    if not ditemukan:
+        print("Tidak ada transaksi yang sesuai.")
+
 def saveData():
     with open(DATA_FILE, "w") as file:
         json.dump(transaksi, file, indent=4)
@@ -263,18 +369,25 @@ while True:
     showMenu()
     choice = input("Pilih menu: ")
 
-    if choice == "1":
-        tambahTransaksi()
-    elif choice == "2":
-        lihatTransaksi()
-    elif choice == "3":
-        editTransaksi()
-    elif choice == "4":
-        hapusTransaksi()
-    elif choice == "5":
-        lihatSaldo()
-    elif choice == "0":
-        print("\nTerima kasih telah menggunakan Money Manager!")
-        break
-    else:
-        print("Pilihan tidak valid. Silakan coba lagi.")
+    match choice:
+        case "1":
+            tambahTransaksi()
+        case "2":
+            lihatTransaksi()
+        case "3":
+            editTransaksi()
+        case "4":
+            hapusTransaksi()
+        case "5":
+            lihatSaldo()
+        case "6":
+            searchTransaksi()
+        case "7":
+            laporanKeuangan()
+        case "8":
+            filterTransaksi()
+        case "0":
+            print("\nTerima kasih telah menggunakan Money Manager!")
+            break
+        case _:
+            print("Pilihan tidak valid.")
