@@ -17,11 +17,25 @@ def tambahTransaksi():
     if tipeTransaksi != 'pemasukan' and tipeTransaksi != 'pengeluaran':
         print("Tipe transaksi tidak valid. Harap masukkan 'pemasukan' atau 'pengeluaran'.")
         return
-    nominal = int(input("Nominal : "))
+    
+    idTerbesar = 0
+    for t in transaksi:
+        if t["id"] > idTerbesar:
+            idTerbesar = t["id"]
+    idBaru = idTerbesar + 1
+    try:
+        nominal = int(input("Nominal : "))
+    except:
+        print("Nominal harus berupa angka.")
+        return
+
+    if nominal <= 0:
+        print("Nominal harus lebih besar dari 0.")
+        return
     kategori = input("Kategori : ")
     deskripsi = input("Deskripsi : ")
     dataTransaksi = {
-        "id": len(transaksi) + 1,
+        "id": idBaru,
         "tipe": tipeTransaksi,
         "nominal": nominal,
         "kategori": kategori,
@@ -46,13 +60,24 @@ def lihatTransaksi():
 
 def editTransaksi():
     print("\n=== Cari Transaksi ===")
-    idTransaksi = int(input("Masukkan ID transaksi : "))
+    try:
+        idTransaksi = int(input("Masukkan ID transaksi : "))
+    except:
+        print("ID transaksi harus berupa angka.")
+        return
     for t in transaksi:
         if t["id"] == idTransaksi:
             print("\nTransaksi ditemukan:")
             print("------------")
             print(f"Nominal Sebelum : Rp.{t['nominal']}")
-            nominalBaru = int(input("Masukkan nominal baru : "))
+            try:
+                nominalBaru = int(input("Masukkan nominal baru : "))
+            except:
+                print("Nominal harus berupa angka.")
+                return
+            if nominalBaru <= 0:
+                print("Nominal harus lebih besar dari 0.")
+                return
             t["nominal"] = nominalBaru
             tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
             if tipeBaru != 'pemasukan' and tipeBaru != 'pengeluaran':
@@ -69,7 +94,11 @@ def editTransaksi():
 
 def hapusTransaksi():
     print("\n=== Hapus Transaksi ===")
-    idTransaksi = int(input("Masukkan ID transaksi yang ingin dihapus: "))
+    try:
+        idTransaksi = int(input("Masukkan ID transaksi yang ingin dihapus: "))
+    except:
+        print("ID transaksi harus berupa angka.")
+        return
     for t in transaksi:
         if t["id"] == idTransaksi:
             transaksi.remove(t)
