@@ -1,9 +1,13 @@
+# IMPORT PACKAGE YANG DIBUTUHKAN
 import json
 import os
 from datetime import datetime
+
+# KONFIGURASI DAN VARIABLE
 transaksi = []
 DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
 
+# FORMAT RUPIAH (Rp. x.xxx.xxx)
 def formatRupiah(nominal):
     return f"Rp.{nominal:,}".replace(",", ".")
 
@@ -128,7 +132,7 @@ def lihatTransaksi():
         tampilkanDetail(t)
 
 def editTransaksi():
-    print("\n=== Cari Transaksi ===")
+    print("\n=== Edit Transaksi ===")
 
     # Mencari transaksi berdasarkan ID
     try:
@@ -143,33 +147,61 @@ def editTransaksi():
             print("Transaksi ID tidak ditemukan.")
             return
 
-    print("\n- Transaksi Ditemukan : ")
-    tampilkanDetail(t)
+    while True:
+        print("\n- Transaksi Saat Ini : ")
+        tampilkanDetail(t)
+        print("== Data yang dapat diubah ==")
+        print("1. Nominal")
+        print("2. Tipe")
+        print("3. Kategori")
+        print("4. Deskripsi")
+        print("0. Selesai")
+        print("----------------")
+        pilihan = input("Pilih (0-4) : ")
+        
+        match pilihan:
+            case "1":
+                try:
+                    nominalBaru = int(input("Masukkan nominal baru : "))
+                except ValueError:
+                    print("Nominal harus berupa angka.")
+                    continue
 
-    try:
-        nominalBaru = int(input("Masukkan nominal baru : "))
-    except ValueError:
-        print("Nominal harus berupa angka.")
-        return
+                if nominalBaru <= 0:
+                    print("Nominal harus lebih besar dari 0")
+                    continue
+                t["nominal"] = nominalBaru
+                print("Nominal berhasil diubah.")
 
-    tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
-    if tipeBaru != "pemasukan" and tipeBaru != "pengeluaran":
-        print("Tipe transaksi tidak valid.")
-        return
+            case "2":
+                tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
+                if tipeBaru != "pemasukan" and tipeBaru != "pengeluaran":
+                    print("Tipe transaksi tidak valid.")
+                    continue
 
-    kategoriBaru = pilihKategori()
+                t["tipe"] = tipeBaru
+                print("Tipe transaksi berhasil diubah.")
 
-    if kategoriBaru is None:
-        return
+            case "3":
+                kategoriBaru = pilihKategori()
+                if kategoriBaru is None:
+                    continue
 
-    deskripsiBaru = input("Masukkan deskripsi baru : ")
+                t["kategori"] = kategoriBaru
+                print("Kategori berhasil diubah.")
 
-    t["nominal"] = nominalBaru
-    t["tipe"] = tipeBaru
-    t["kategori"] = kategoriBaru
-    t["deskripsi"] = deskripsiBaru
-    saveData()
-    print("\nTransaksi berhasil diubah!")
+            case "4":
+                deskripsiBaru = input("Masukkan deskripsi baru : ")
+                t["deskripsi"] = deskripsiBaru
+                print("Deskripsi berhasil diubah.")
+
+            case "0":
+                saveData()
+                print("Perubahan berhasil disimpan")
+                break
+
+            case _:
+                print("Pilihan tidak valid.")
 
 def hapusTransaksi():
     print("\n=== Hapus Transaksi ===")

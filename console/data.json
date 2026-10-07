@@ -5,14 +5,22 @@
         "tipe": "pemasukan",
         "nominal": 100000,
         "kategori": "Lainnya",
-        "deskripsi": "90"
+        "deskripsi": "Jajan"
     },
     {
         "id": 2,
         "tanggal": "07 - 10 - 2026",
-        "tipe": "pemasukan",
+        "tipe": "pengeluaran",
         "nominal": 80000,
-        "kategori": "Lainnya",
+        "kategori": "Transportasi",
         "deskripsi": "asd"
+    },
+    {
+        "id": 3,
+        "tanggal": "07 - 10 - 2026",
+        "tipe": "pemasukan",
+        "nominal": 90000,
+        "kategori": "Transportasi",
+        "deskripsi": "Jajan"
     }
 ]
