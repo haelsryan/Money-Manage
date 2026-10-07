@@ -7,6 +7,23 @@ DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
 def formatRupiah(nominal):
     return f"Rp.{nominal:,}".replace(",", ".")
 
+def tampilkanDetail(t):
+    print("------------")
+    print(f"ID        : {t['id']}")
+    print(f"Tanggal   : {t['tanggal']}")
+    print(f"Tipe      : {t['tipe']}")
+    print(f"Nominal   : {formatRupiah(t['nominal'])}")
+    print(f"Kategori  : {t['kategori']}")
+    print(f"Deskripsi : {t['deskripsi']}")
+    print("------------")
+
+def cariTransaksi(idTransaksi):
+    for t in transaksi:
+        if t["id"] == idTransaksi:
+            return t
+        
+    return None
+
 def pilihKategori():
     print("\n=== Pilih Kategori ===")
     print("1. Makanan & Minuman")
@@ -108,13 +125,7 @@ def lihatTransaksi():
         return
 
     for t in transaksi:
-        print("------------")
-        print(f"ID        : {t['id']}")
-        print(f"Tanggal   : {t['tanggal']}")
-        print(f"Tipe      : {t['tipe']}")
-        print(f"Nominal   : {formatRupiah(t['nominal'])}")
-        print(f"Kategori  : {t['kategori']}")
-        print(f"Deskripsi : {t['deskripsi']}")
+        tampilkanDetail(t)
 
 def editTransaksi():
     print("\n=== Cari Transaksi ===")
@@ -122,81 +133,69 @@ def editTransaksi():
     # Mencari transaksi berdasarkan ID
     try:
         idTransaksi = int(input("Masukkan ID transaksi : "))
-    except:
+    except ValueError:
         print("ID transaksi harus berupa angka.")
         return
-    for t in transaksi:
-        if t["id"] == idTransaksi:
-            print("\nTransaksi ditemukan:")
-            print("------------")
-            print(f"ID        : {t['id']}")
-            print(f"Tanggal   : {t['tanggal']}")
-            print(f"Tipe      : {t['tipe']}")
-            print(f"Nominal   : {formatRupiah(t['nominal'])}")
-            print(f"Kategori  : {t['kategori']}")
-            print(f"Deskripsi : {t['deskripsi']}")
-            print("------------")
-            try:
-                nominalBaru = int(input("Masukkan nominal baru : "))
-            except ValueError:
-                print("Nominal harus berupa angka.")
-                return
-            
-            if nominalBaru <= 0:
-                print("Nominal harus lebih besar dari 0.")
-                return
 
-            # Update Tipe
-            tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
-            if tipeBaru != 'pemasukan' and tipeBaru != 'pengeluaran':
-                print("Tipe transaksi tidak valid. Harap masukkan 'pemasukan' atau 'pengeluaran'.")
-                return
+    t = cariTransaksi(idTransaksi)
 
-            # Edit Kategori
-            kategoriBaru = pilihKategori()
-            if kategoriBaru is None:
-                return
-
-            # Edit Deskripsi
-            deskripsiBaru = input("Masukkan deskripsi baru : ")
-
-            # Update Data Transaksi
-            t["nominal"] = nominalBaru
-            t["tipe"] = tipeBaru
-            t["kategori"] = kategoriBaru
-            t["deskripsi"] = deskripsiBaru
-            saveData()
-            print("\nTransaksi Berhasil Diubah")
+    if t is None:
+            print("Transaksi ID tidak ditemukan.")
             return
-    print("Transaksi dengan ID tersebut tidak ditemukan.")
+
+    print("\n- Transaksi Ditemukan : ")
+    tampilkanDetail(t)
+
+    try:
+        nominalBaru = int(input("Masukkan nominal baru : "))
+    except ValueError:
+        print("Nominal harus berupa angka.")
+        return
+
+    tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
+    if tipeBaru != "pemasukan" and tipeBaru != "pengeluaran":
+        print("Tipe transaksi tidak valid.")
+        return
+
+    kategoriBaru = pilihKategori()
+
+    if kategoriBaru is None:
+        return
+
+    deskripsiBaru = input("Masukkan deskripsi baru : ")
+
+    t["nominal"] = nominalBaru
+    t["tipe"] = tipeBaru
+    t["kategori"] = kategoriBaru
+    t["deskripsi"] = deskripsiBaru
+    saveData()
+    print("\nTransaksi berhasil diubah!")
 
 def hapusTransaksi():
     print("\n=== Hapus Transaksi ===")
+
     try:
         idTransaksi = int(input("Masukkan ID transaksi yang ingin dihapus: "))
     except ValueError:
         print("ID transaksi harus berupa angka.")
         return
     
-    for t in transaksi:
-        if t["id"] == idTransaksi:
-            print("\n--- Transaksi Yang Akan Dihapus ---")
-            print(f"ID        : {t['id']}")
-            print(f"Tanggal   : {t['tanggal']}")
-            print(f"Tipe      : {t['tipe']}")
-            print(f"Nominal   : {formatRupiah(t['nominal'])}")
-            print(f"Kategori  : {t['kategori']}")
-            print(f"Deskripsi : {t['deskripsi']}")
-            konfirmasi = input("Apakah anda yakin untuk menghapus transaksi ini? (y/n) : ").lower()
+    t = cariTransaksi(idTransaksi)
+    if t is None:
+        print("Transaksi ID tidak ditemukan.")
+        return
+    
+    print("\n- Transaksi Yang Akan Dihapus :")
+    tampilkanDetail(t)
+    konfirmasi = input("Apakah anda yakin untuk menghapus transaksi ini? (y/n) : ").lower()
 
-            if konfirmasi == "y":
-                transaksi.remove(t)
-                saveData()
-                print("Transaksi berhasil dihapus!")
-            else:
-                print("Penghapusan dibatalkan.")
-            return
-    print("Transaksi dengan ID tersebut tidak ditemukan.")
+    if konfirmasi == "y":
+        transaksi.remove(t)
+        saveData()
+        print("Transaksi berhasil dihapus!")
+    else:
+        print("Penghapusan dibatalkan.")
+    return
 
 def lihatSaldo():
     totalPemasukan = 0
