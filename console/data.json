@@ -6,5 +6,13 @@
         "nominal": 50000,
         "kategori": "Transportasi",
         "deskripsi": "as"
+    },
+    {
+        "id": 2,
+        "tanggal": "09-10-2026",
+        "tipe": "pemasukan",
+        "nominal": 50000,
+        "kategori": "Lainnya",
+        "deskripsi": "asd"
     }
 ]
