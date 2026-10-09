@@ -3,7 +3,7 @@
         "id": 1,
         "tanggal": "07 - 10 - 2026",
         "tipe": "pemasukan",
-        "nominal": 100000,
+        "nominal": 80000,
         "kategori": "Lainnya",
         "deskripsi": "Jajan"
     },
@@ -22,5 +22,13 @@
         "nominal": 90000,
         "kategori": "Transportasi",
         "deskripsi": "Jajan"
+    },
+    {
+        "id": 4,
+        "tanggal": "09-10-2026",
+        "tipe": "pemasukan",
+        "nominal": 25000,
+        "kategori": "Belanja",
+        "deskripsi": "asd"
     }
 ]
