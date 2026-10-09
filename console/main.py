@@ -1,11 +1,8 @@
 # IMPORT PACKAGE YANG DIBUTUHKAN
-import json
-import os
 from datetime import datetime
-
-# KONFIGURASI DAN VARIABLE
-transaksi = []
-DATA_FILE = os.path.join(os.path.dirname(__file__), "data.json")
+import validasi
+import storage
+transaksi = storage.loadData()
 
 # FORMAT RUPIAH (Rp. x.xxx.xxx)
 def formatRupiah(nominal):
@@ -27,17 +24,6 @@ def cariTransaksi(idTransaksi):
             return t
         
     return None
-
-def inputNominal(pesan):
-    while True:
-        try:
-            nominal = int(input(pesan))
-            if nominal <= 0:
-                print("Angka tidak boleh minus!")
-                continue
-            return nominal
-        except ValueError:
-            print("Tidak Valid! masukkan angka.")
             
 def searchTransaksi():
     print("\n=== Cari Transaksi ===")
@@ -95,10 +81,7 @@ def showMenu():
 
 def tambahTransaksi():
     print("\n=== Tambah Transaksi ===")
-    tipeTransaksi = input("Masukkan tipe transaksi (pemasukan/pengeluaran): ").lower()
-    if tipeTransaksi != 'pemasukan' and tipeTransaksi != 'pengeluaran':
-        print("Tipe transaksi tidak valid. Harap masukkan 'pemasukan' atau 'pengeluaran'.")
-        return
+    tipeTransaksi = validasi.inputTipeTransaksi("Masukkan tipe transaksi (pemasukan/pengeluaran): ")
 
     # ID Baru
     idTerbesar = 0
@@ -108,11 +91,7 @@ def tambahTransaksi():
     idBaru = idTerbesar + 1
 
     # Input Nominal
-    try:
-        nominal = inputNominal("Nominal : ")
-    except ValueError:
-        print("Nominal harus berupa angka.")
-        return
+    nominal = validasi.inputNominal("Nominal : ")
 
     # Tanggal Transaksi
     tanggal = datetime.now().strftime("%d-%m-%Y")
@@ -135,7 +114,7 @@ def tambahTransaksi():
         "deskripsi": deskripsi
     }
     transaksi.append(dataTransaksi)
-    saveData()
+    storage.saveData(transaksi)
 
     print("\nTransaksi berhasil ditambahkan!")
     print(f"ID Transaksi : {idBaru}")
@@ -146,11 +125,11 @@ def tambahTransaksi():
     print(f"Deskripsi    : {deskripsi}")
 
 def lihatTransaksi():
-    print("\n=== Daftar Transaksi ===")
-
-    if len(transaksi) == 0:
-        print("Belum ada transaksi.")
+    if not transaksi:
+        print("Belum ada transaksi!")
         return
+    
+    print("\n=== Daftar Transaksi ===")
 
     for t in transaksi:
         tampilkanDetail(t)
@@ -185,26 +164,15 @@ def editTransaksi():
         
         match pilihan:
             case "1":
-                try:
-                    nominalBaru = inputNominal("Masukkan nominal baru : ")
-                except ValueError:
-                    print("Nominal harus berupa angka.")
-                    continue
-
-                if nominalBaru <= 0:
-                    print("Nominal harus lebih besar dari 0")
-                    continue
+                nominalBaru = validasi.inputNominal("Masukkan nominal baru : ")
                 t["nominal"] = nominalBaru
                 print("Nominal berhasil diubah.")
 
             case "2":
-                tipeBaru = input("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ").lower()
-                if tipeBaru != "pemasukan" and tipeBaru != "pengeluaran":
-                    print("Tipe transaksi tidak valid.")
-                    continue
-
+                tipeBaru = validasi.inputTipeTransaksi("Masukkan tipe transaksi baru (pemasukan/pengeluaran) : ")
                 t["tipe"] = tipeBaru
                 print("Tipe transaksi berhasil diubah.")
+                continue
 
             case "3":
                 kategoriBaru = pilihKategori()
@@ -220,7 +188,7 @@ def editTransaksi():
                 print("Deskripsi berhasil diubah.")
 
             case "0":
-                saveData()
+                storage.saveData(transaksi)
                 print("Perubahan berhasil disimpan")
                 break
 
@@ -247,7 +215,7 @@ def hapusTransaksi():
 
     if konfirmasi == "y":
         transaksi.remove(t)
-        saveData()
+        storage.saveData(transaksi)
         print("Transaksi berhasil dihapus!")
     else:
         print("Penghapusan dibatalkan.")
@@ -358,21 +326,6 @@ def filterTransaksi():
     if not ditemukan:
         print("Tidak ada transaksi yang sesuai.")
 
-def saveData():
-    with open(DATA_FILE, "w") as file:
-        json.dump(transaksi, file, indent=4)
-
-def loadData():
-    global transaksi
-    try:
-        with open(DATA_FILE, "r") as file:
-            transaksi = json.load(file)
-    except FileNotFoundError:
-        transaksi = []
-    except json.JSONDecodeError:
-        print("Data JSON rusak atau tidak valid.")
-        transaksi = []
-
 def laporanBulanan():
     print("\n=== Laporan Bulanan ===")
 
@@ -381,27 +334,26 @@ def laporanBulanan():
         return
 
     namaBulan = [
-        "",
-        "Januari", "Februari", "Maret", "April",
-        "Mei", "Juni", "Juli", "Agustus",
-        "September", "Oktober", "November", "Desember"
+        "", "Januari", "Februari", "Maret", "April",
+        "Mei", "Juni", "Juli", "Agustus", "September", 
+        "Oktober", "November", "Desember"
     ]
+    while True:
+        try:
+            bulan = int(input("Masukkan bulan (1-12): "))
+            tahun = int(input("Masukkan tahun (contoh: 2026): "))
+            if bulan < 1 or bulan > 12:
+                print("Bulan harus antara 1 dan 12.")
+                continue
 
-    try:
-        bulan = int(input("Masukkan nomor bulan (1-12): "))
-        tahun = int(input("Masukkan tahun (contoh: 2026): "))
-    except ValueError:
-        print("Bulan dan tahun harus berupa angka.")
-        return
-
-    if bulan < 1 or bulan > 12:
-        print("Bulan harus antara 1 dan 12.")
-        return
-
-    if tahun < 1:
-        print("Tahun tidak valid.")
-        return
-
+            if tahun < 1:
+                print("Tidak ada tahun dibawah 0!")
+                continue
+            break
+            
+        except ValueError:
+            print("Bulan dan tahun harus berupa angka.")
+        
     # Variabel laporan
     totalPemasukan = 0
     totalPengeluaran = 0
@@ -486,32 +438,34 @@ def laporanBulanan():
     for t in transaksiBulan:
         tampilkanDetail(t)
 
-loadData()
-while True:
-    showMenu()
-    choice = input("Pilih menu: ")
+def main():
+    while True:
+        showMenu()
+        choice = input("Pilih menu: ")
+        match choice:
+            case "1":
+                tambahTransaksi()
+            case "2":
+                lihatTransaksi()
+            case "3":
+                editTransaksi()
+            case "4":
+                hapusTransaksi()
+            case "5":
+                lihatSaldo()
+            case "6":
+                searchTransaksi()
+            case "7":
+                laporanKeuangan()
+            case "8":
+                filterTransaksi()
+            case "9":
+                laporanBulanan()
+            case "0":
+                print("\nTerima kasih telah menggunakan Money Manager!")
+                break
+            case _:
+                print("Pilihan tidak tersedia.")
 
-    match choice:
-        case "1":
-            tambahTransaksi()
-        case "2":
-            lihatTransaksi()
-        case "3":
-            editTransaksi()
-        case "4":
-            hapusTransaksi()
-        case "5":
-            lihatSaldo()
-        case "6":
-            searchTransaksi()
-        case "7":
-            laporanKeuangan()
-        case "8":
-            filterTransaksi()
-        case "9":
-            laporanBulanan()
-        case "0":
-            print("\nTerima kasih telah menggunakan Money Manager!")
-            break
-        case _:
-            print("Pilihan tidak valid.")
+if __name__ == "__main__":
+    main()

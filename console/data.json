@@ -1,34 +1,10 @@
 [
     {
         "id": 1,
-        "tanggal": "07 - 10 - 2026",
-        "tipe": "pemasukan",
-        "nominal": 80000,
-        "kategori": "Lainnya",
-        "deskripsi": "Jajan"
-    },
-    {
-        "id": 2,
-        "tanggal": "07 - 10 - 2026",
-        "tipe": "pengeluaran",
-        "nominal": 80000,
-        "kategori": "Transportasi",
-        "deskripsi": "asd"
-    },
-    {
-        "id": 3,
-        "tanggal": "07 - 10 - 2026",
-        "tipe": "pemasukan",
-        "nominal": 90000,
-        "kategori": "Transportasi",
-        "deskripsi": "Jajan"
-    },
-    {
-        "id": 4,
         "tanggal": "09-10-2026",
-        "tipe": "pemasukan",
-        "nominal": 25000,
-        "kategori": "Belanja",
-        "deskripsi": "asd"
+        "tipe": "pengeluaran",
+        "nominal": 50000,
+        "kategori": "Transportasi",
+        "deskripsi": "as"
     }
 ]
