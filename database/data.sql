@@ -6,6 +6,3 @@ CREATE TABLE IF NOT EXISTS transactions (
 	kategori TEXT NOT NULL,
 	deskripsi TEXT NOT NULL
 );
-
-CREATE INDEX IF NOT EXISTS idx_transactions_tanggal
-	ON transactions (tanggal);
