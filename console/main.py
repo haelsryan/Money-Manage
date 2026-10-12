@@ -3,6 +3,8 @@ from datetime import datetime
 import validasi
 import storage
 import keuangan
+import keuangan
+import transaksiAction
 transaksi = storage.loadData()
 
 # FORMAT RUPIAH (Rp. x.xxx.xxx)
@@ -18,13 +20,6 @@ def tampilkanDetail(t):
     print(f"Kategori  : {t['kategori']}")
     print(f"Deskripsi : {t['deskripsi']}")
     print("------------")
-
-def cariTransaksi(idTransaksi):
-    for t in transaksi:
-        if t["id"] == idTransaksi:
-            return t
-        
-    return None
             
 def searchTransaksi():
     print("\n=== Cari Transaksi ===")
@@ -76,20 +71,12 @@ def showMenu():
     print("6. Cari Transaksi")
     print("7. Laporan Keuangan")
     print("8. Filter Transaksi")
-    print("9. Laporan Bulanan")
     print("0. Keluar")
     print("----------------")
 
 def tambahTransaksi():
     print("\n=== Tambah Transaksi ===")
     tipeTransaksi = validasi.inputTipeTransaksi("Masukkan tipe transaksi (pemasukan/pengeluaran): ")
-
-    # ID Baru
-    idTerbesar = 0
-    for t in transaksi:
-        if t["id"] > idTerbesar:
-            idTerbesar = t["id"]
-    idBaru = idTerbesar + 1
 
     # Input Nominal
     nominal = validasi.inputNominal("Nominal : ")
@@ -111,24 +98,24 @@ def tambahTransaksi():
         print("Deskripsi tidak boleh kosong")
 
     # Membuat data transaksi baru
-    dataTransaksi = {
-        "id": idBaru,
-        "tanggal": tanggal,
-        "tipe": tipeTransaksi,
-        "nominal": nominal,
-        "kategori": kategori,
-        "deskripsi": deskripsi
-    }
-    transaksi.append(dataTransaksi)
+    dataTransaksi = transaksiAction.buatTransaksi(
+        transaksi,
+        tipeTransaksi,
+        nominal,
+        tanggal,
+        kategori,
+        deskripsi
+    )
+
     storage.saveData(transaksi)
 
     print("\nTransaksi berhasil ditambahkan!")
-    print(f"ID Transaksi : {idBaru}")
-    print(f"Tanggal      : {tanggal}")
-    print(f"Tipe         : {tipeTransaksi}")
-    print(f"Nominal      : {formatRupiah(nominal)}")
-    print(f"Kategori     : {kategori}")
-    print(f"Deskripsi    : {deskripsi}")
+    print(f"ID Transaksi : {dataTransaksi['id']}")
+    print(f"Tanggal      : {dataTransaksi['tanggal']}")
+    print(f"Tipe         : {dataTransaksi['tipe']}")
+    print(f"Nominal      : {formatRupiah(dataTransaksi['nominal'])}")
+    print(f"Kategori     : {dataTransaksi['kategori']}")
+    print(f"Deskripsi    : {dataTransaksi['deskripsi']}")
 
 def lihatTransaksi():
     if not transaksi:
@@ -150,7 +137,7 @@ def editTransaksi():
         print("ID transaksi harus berupa angka.")
         return
 
-    t = cariTransaksi(idTransaksi)
+    t = transaksiAction.cariTransaksi(transaksi, idTransaksi)
 
     if t is None:
         print("Transaksi ID tidak ditemukan.")
@@ -214,7 +201,7 @@ def hapusTransaksi():
         print("ID transaksi harus berupa angka.")
         return
     
-    t = cariTransaksi(idTransaksi)
+    t = transaksiAction.cariTransaksi(transaksi, idTransaksi)
     if t is None:
         print("Transaksi ID tidak ditemukan.")
         return
@@ -307,118 +294,6 @@ def filterTransaksi():
     if not ditemukan:
        print("Tidak ada transaksi yang sesuai.")
 
-def laporanBulanan():
-    print("\n=== Laporan Bulanan ===")
-
-    if len(transaksi) == 0:
-        print("Belum ada transaksi.")
-        return
-
-    namaBulan = [
-        "", "Januari", "Februari", "Maret", "April",
-        "Mei", "Juni", "Juli", "Agustus", "September", 
-        "Oktober", "November", "Desember"
-    ]
-    while True:
-        try:
-            bulan = int(input("Masukkan bulan (1-12): "))
-            tahun = int(input("Masukkan tahun (contoh: 2026): "))
-            if bulan < 1 or bulan > 12:
-                print("Bulan harus antara 1 dan 12.")
-                continue
-
-            if tahun < 1:
-                print("Tidak ada tahun dibawah 0!")
-                continue
-            break
-            
-        except ValueError:
-            print("Bulan dan tahun harus berupa angka.")
-        
-    # Variabel laporan
-    totalPemasukan = 0
-    totalPengeluaran = 0
-    jumlahPemasukan = 0
-    jumlahPengeluaran = 0
-
-    pengeluaranKategori = {}
-    transaksiBulan = []
-
-    # Memfilter transaksi berdasarkan bulan dan tahun
-    for t in transaksi:
-        tanggal = None
-
-        # Mendukung format tanggal lama dan baru
-        for formatTanggal in ("%d-%m-%Y", "%d - %m - %Y"):
-            try:
-                tanggal = datetime.strptime(
-                    t["tanggal"], formatTanggal
-                )
-                break
-            except (ValueError, TypeError):
-                continue
-
-        # Lewati transaksi dengan tanggal yang tidak valid
-        if tanggal is None:
-            continue
-
-        # Pastikan bulan dan tahun sesuai
-        if tanggal.month != bulan or tanggal.year != tahun:
-            continue
-
-        transaksiBulan.append(t)
-
-        if t["tipe"] == "pemasukan":
-            totalPemasukan += t["nominal"]
-            jumlahPemasukan += 1
-
-        elif t["tipe"] == "pengeluaran":
-            totalPengeluaran += t["nominal"]
-            jumlahPengeluaran += 1
-
-            kategori = t["kategori"]
-
-            if kategori not in pengeluaranKategori:
-                pengeluaranKategori[kategori] = 0
-
-            pengeluaranKategori[kategori] += t["nominal"]
-
-    # Periksa apakah transaksi ditemukan
-    if len(transaksiBulan) == 0:
-        print(
-            f"Tidak ada transaksi pada "
-            f"{namaBulan[bulan]} {tahun}."
-        )
-        return
-
-    saldo = totalPemasukan - totalPengeluaran
-
-    # Tampilkan laporan
-    print(f"\n=== Laporan {namaBulan[bulan]} {tahun} ===")
-
-    print("\n=== Ringkasan ===")
-    print(f"Jumlah Transaksi   : {len(transaksiBulan)}")
-    print(f"Jumlah Pemasukan   : {jumlahPemasukan}")
-    print(f"Jumlah Pengeluaran : {jumlahPengeluaran}")
-
-    print("\n=== Keuangan ===")
-    print(f"Total Pemasukan    : {formatRupiah(totalPemasukan)}")
-    print(f"Total Pengeluaran  : {formatRupiah(totalPengeluaran)}")
-    print(f"Saldo Bersih       : {formatRupiah(saldo)}")
-
-    print("\n=== Pengeluaran Berdasarkan Kategori ===")
-
-    if len(pengeluaranKategori) == 0:
-        print("Belum ada pengeluaran.")
-    else:
-        for kategori, total in pengeluaranKategori.items():
-            print(f"{kategori:<20}: {formatRupiah(total)}")
-
-    print("\n=== Daftar Transaksi Bulanan ===")
-
-    for t in transaksiBulan:
-        tampilkanDetail(t)
-
 def main():
     while True:
         showMenu()
@@ -440,8 +315,6 @@ def main():
                 laporanKeuangan()
             case "8":
                 filterTransaksi()
-            case "9":
-                laporanBulanan()
             case "0":
                 print("\nTerima kasih telah menggunakan Money Manager!")
                 break

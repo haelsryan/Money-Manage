@@ -1,7 +1,6 @@
 def hitungSaldo(transaksi):
     totalPemasukan = 0
     totalPengeluaran = 0
-
     for t in transaksi:
         if t["tipe"] == "pemasukan":
             totalPemasukan += t["nominal"]
@@ -49,4 +48,4 @@ def laporanKeuangan(transaksi):
         "pemasukanKategori": pemasukanKategori,
         "pengeluaranKategori": pengeluaranKategori,
         "transaksiTerbesar": transaksiTerbesar
-    }
+    }    
