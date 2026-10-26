@@ -1,161 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CREDIX - Your Future is here</title>
-    <!-- Menghubungkan file CSS -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Moment - Track Your Money </title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigasi -->
-    <header class="navbar">
-        <div class="logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"/>
-                <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-        <nav class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Features</a>
-            <a href="#">About</a>
-            <a href="#">Blog</a>
-            <a href="#">Contact</a>
-        </nav>
-        <button class="btn-nav">Get Started</button>
-    </header>
 
-    <!-- Bagian Hero Utama -->
-    <main class="hero">
-        <h1 class="hero-title">Simplified Your Money<br>For Easier life</h1>
-        <p class="hero-subtitle">Built on a foundation of trust and security, we ensure that your<br>finances are always protected.</p>
+  <!-- Header / Navbar -->
+  <header>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <span class="logo-icon"> M </span>
+            Moment.        
+        </a>
         
-        <div class="form-group">
-            <input type="email" placeholder="Email@example.com" class="email-input">
-            <button class="btn-primary">Create Account</button>
+        <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+        </ul>
+
+        <a href="#" class="nav-button"> Login </a>
+    </nav>
+  </header>
+
+  
+<main>
+    <section id="home" class="hero">
+
+        <!-- Background decoration -->
+        <div class="hero-glow hero-glow-left"></div>
+        <div class="hero-glow hero-glow-right"></div>
+
+        <!-- Hero text -->
+        <div class="hero-content">
+            <p class="eyebrow"> YOUR FINANCES, SIMPLIFIED </p>
+
+            <h1>
+                Track Your Money Like a
+                <span> Moment. </span>
+            </h1>
+
+            <p class="hero-description">
+                Manage spending, track income, and stay on top
+                of your finances with ease. all from one
+                simple dashboard.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#features" class="primary-button">
+                    Get Started <span>↗</span>
+                </a>
+
+                <a href="#features" class="secondary-button">
+                    Explore Features
+                </a>
+            </div>
         </div>
 
-        <!-- Placeholder untuk Dashboard UI -->
-        <!-- Tampilan Dashboard Preview -->
-        <div class="dashboard-preview">
-            <div class="dashboard-inner">
-                
-                <!-- Sidebar -->
-                <aside class="sidebar">
-                    <div class="sidebar-logo">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        <b>Credix</b>
-                    </div>
-                    <ul class="sidebar-menu">
-                        <li class="active"><span class="icon">⌂</span> Overview</li>
-                        <li><span class="icon">✉</span> Messages <span class="badge">2</span></li>
-                        <li><span class="icon">⚑</span> Community</li>
-                        <li><span class="icon">💳</span> Payments</li>
-                        <li><span class="icon">📊</span> Statistics</li>
-                        <li><span class="icon">✧</span> Referrals</li>
-                    </ul>
-                </aside>
+        <!-- Dashboard illustration -->
+        <div class="dashboard-scene"> 
+            <!-- Main dashboard -->
+            <div class="dashboard">
 
-                <!-- Main Content Dashboard -->
-                <div class="dashboard-main">
-                    
-                    <!-- Dashboard Header -->
-                    <div class="dash-header">
-                        <div class="search-bar">
-                            <span class="icon">🔍</span>
-                            <input type="text" placeholder="Search...">
-                        </div>
-                        <div class="user-profile">
-                            <span class="lang">EN</span>
-                            <div class="avatar">
-                                <img src="https://i.pravatar.cc/150?img=68" alt="Profile">
-                            </div>
-                        </div>
+                <div class="dashboard-header">
+                    <a href="#home" class="mini-logo">
+                        <span class="logo-icon"> M </span>
+                        Moment
+                    </a>
+
+                    <div class="profile-avatar"> JD </div>
+                </div>
+
+                <div class="dashboard-welcome">
+                    <p> Welcome back, Syahroel. </p>
+                    <small> Here's your financial overview. </small>
+                </div>
+
+                <div class="balance-card">
+                    <div class="balance-top">
+                        <span> Total Balance </span>
+                        <span class="balance-dots"> ••• </span>
                     </div>
 
-                    <!-- Dashboard Grid Content -->
-                    <div class="dash-grid">
-                        
-                        <!-- Kolom Kiri -->
-                        <div class="grid-left">
-                            <h3 class="section-title">Dashboard</h3>
-                            
-                            <!-- Kartu Kredit -->
-                            <div class="credit-card">
-                                <div class="card-logo">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
-                                </div>
-                                <div class="card-number">•••• •••• •••• 5892</div>
-                                <div class="card-footer">
-                                    <span>David Beckham</span>
-                                    <div class="mastercard-logo">
-                                        <div class="circle red"></div>
-                                        <div class="circle yellow"></div>
-                                    </div>
-                                </div>
-                            </div>
+                    <h2> $24,680.50 </h2>
 
-                            <!-- Transaksi Terakhir -->
-                            <h4 class="section-subtitle">Recent transactions <span class="sort">Sort by ⌄</span></h4>
-                            <div class="transaction-list">
-                                <div class="transaction-item">
-                                    <div class="tx-icon">🚕</div>
-                                    <div class="tx-details">
-                                        <p class="tx-name">Taxi Trips</p>
-                                        <p class="tx-date">14 Aug 2023, 16:21</p>
-                                    </div>
-                                    <div class="tx-amount">-$54.50</div>
-                                </div>
-                                <div class="transaction-item">
-                                    <div class="tx-icon">🚌</div>
-                                    <div class="tx-details">
-                                        <p class="tx-name">Public Transport</p>
-                                        <p class="tx-date">12 Aug 2023, 11:21</p>
-                                    </div>
-                                    <div class="tx-amount">-$2.30</div>
-                                </div>
-                            </div>
-                        </div>
+                    <p> ↗ 12.8% <span> compared to last month </span></p>
 
-                        <!-- Kolom Kanan -->
-                        <div class="grid-right">
-                            <h3 class="section-title">Upcoming payments</h3>
-                            
-                            <!-- Widget Pembayaran -->
-                            <div class="payments-row">
-                                <div class="payment-box">
-                                    <div class="icon-box">💼</div>
-                                    <p class="pay-title">Freelance</p>
-                                    <p class="pay-amount">$1,500</p>
-                                </div>
-                                <div class="payment-box">
-                                    <div class="icon-box">🏢</div>
-                                    <p class="pay-title">Salary</p>
-                                    <p class="pay-amount">$4,000</p>
-                                </div>
-                            </div>
+                    <div class="balance-bottom">
+                        <span>**** **** **** 4829</span>
+                        <strong>VISA</strong>
+                    </div>
+                </div>
 
-                            <!-- Grafik Pengeluaran -->
-                            <div class="chart-section">
-                                <div class="chart-header">
-                                    <p>Spent this day</p>
-                                    <h2>$259.75</h2>
-                                </div>
-                                <div class="chart-graphic">
-                                    <!-- Visualisasi sederhana grafik dengan SVG -->
-                                    <svg viewBox="0 0 300 100" class="line-chart">
-                                        <path d="M0,80 Q40,40 80,70 T150,20 T220,60 T300,50" fill="none" stroke="#1e3a8a" stroke-width="3"/>
-                                        <circle cx="150" cy="20" r="5" fill="#1e3a8a"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            
-                        </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <span class="stat-icon income-bg">↙</span>
+                        <p>Income</p>
+                        <strong>$8,240</strong>
+                        <small>+8.2% this month</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <span class="stat-icon expense-bg">↗</span>
+                        <p>Expenses</p>
+                        <strong>$2,140</strong>
+                        <small> - 3.4% this month</small>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-heading">
+                        <strong>Spending Overview</strong>
+                        <span>This week⌄</span>
+                    </div>
+
+                    <div class="chart">
+                        <div class="chart-bar" style="--height: 42%"></div>
+                        <div class="chart-bar" style="--height: 65%"></div>
+                        <div class="chart-bar" style="--height: 50%"></div>
+                        <div class="chart-bar" style="--height: 78%"></div>
+                        <div class="chart-bar" style="--height: 58%"></div>
+                        <div class="chart-bar active-bar" style="--height: 95%"></div>
+                        <div class="chart-bar" style="--height: 70%"></div>
+                    </div>
+
+                    <div class="chart-labels">
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                        <span>Sun</span>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
+</main>
+
+
+<footer class="satuners-footer">
+    <div class="footer-container">
+
+        <div class="footer-top">
+
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">
+                    satuners<span>®</span>
+                </a>
+
+                <p>
+                    Made and created by Love<br>
+                    from student at Satu University.
+                </p>
+
+                <a href="mailto:hello@zenora.studio" class="footer-email">
+                    satuners@blank.gmail
+                </a>
+
+                <div class="footer-socials">
+                    <a href="#" aria-label="Instagram">ig</a>
+                    <a href="#" aria-label="LinkedIn">in</a>
+                    <a href="#" aria-label="X">𝕏</a>
+                    <a href="#" aria-label="Facebook">F</a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Features</h3>
+                <a href="#"> Add Transaction </a>
+                <a href="#"> Monthly Report </a>
+                <a href="#"> Export to .xlsx </a>
+                <a href="#"> Custom Categories </a>
+            </div>
+
+            <div class="footer-column">
+                <h3> Help </h3>
+                <a href="#"> How it works</a>
+                <a href="#"> Suggestion </a>
+                <a href="#"> FAQ</a>
+                <a href="#"> Contact </a>
+            </div>
+
+            <div class="footer-column">
+                <h3> Socials </h3>
+                <a href="#"> Instagram </a>
+                <a href="#"> Twitter / X </a>
+                <a href="#"> Website </a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Legal</h3>
+                <a href="#"> Privacy Policy </a>
+                <a href="#"> Terms of Service </a>
+            </div>
+
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-copyright">
+            <p>© 2026 satuners. All rights reserved.</p>
+        </div>
+
+        <div class="footer-waves" aria-hidden="true">
+            <div class="wave wave-back"></div>
+            <div class="wave wave-middle"></div>
+            <div class="wave wave-front"></div>
+        </div>
+
+    </div>
+</footer>
+
 </body>
 </html>
